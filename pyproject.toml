@@ -1,0 +1,56 @@
+[tool.poetry]
+name = "wizard-academy"
+version = "0.1.0"
+description = "Magic academy system"
+authors = ["Jonathan M.Sanchez"]
+readme = "README.md"
+
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "0.95.2"
+uvicorn = "0.22.0"
+aioboto3 = "11.1.0"
+pydantic = {extras = ["email"], version = "1.10.13"}
+httpx = "^0.24.1"
+asyncio = "^3.4.3"
+pytz = "^2024.1"
+
+
+[tool.poetry.dev-dependencies]
+black = "23.3.0"
+isort = "5.12.0"
+pytest = "7.3.1"
+pytest-asyncio = "0.21.0"
+pytest-cov = "4.0.0"
+pytest-mock = "3.10.0"
+moto = "^5.0.11"
+faker = "^17.6.0"
+
+
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
+line-length = 100
+max-line-length = 100
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,27 @@
+# see more details here: https://pre-commit.com/
+fail_fast: true
+repos:
+  - repo: local
+    hooks:
+      - id: system
+        stages: [ commit ]
+        name: isort
+        entry: poetry run isort .
+        pass_filenames: false
+        language: system
+  - repo: local
+    hooks:
+      - id: system
+        stages: [ commit ]
+        name: Black
+        entry: poetry run black ./src
+        pass_filenames: false
+        language: system
+  - repo: local
+    hooks:
+      - id: system
+        stages: [ commit ]
+        name: pytest
+        entry: poetry run pytest ./src/tests
+        pass_filenames: false
+        language: system

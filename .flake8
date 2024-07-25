@@ -1,0 +1,6 @@
+[flake8]
+max-line-length = 100
+max-complexity = 15
+exclude = .git,__pycache__,__init__.py,.mypy_cache,.pytest_cache, mocks_*.py
+extend-ignore = E800
+ignore = C417, C901
