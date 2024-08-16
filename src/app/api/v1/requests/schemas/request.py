@@ -4,11 +4,11 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
-from app.models.base import MagicSkillEnum
+from app.models.core import MagicSkillEnum
 from app.models.request import WizardGrimorieTypes, WizardRequestStatus
 
 
-class BaseRequest(BaseModel):
+class BaseRequestSchema(BaseModel):
     id: Optional[str] = Field(None, alias="id")
     record_id: Optional[str] = Field(None, alias="record_id")
     name: Optional[str] = Field(None, alias="name")
@@ -19,7 +19,7 @@ class BaseRequest(BaseModel):
     grimorie: Optional[WizardGrimorieTypes] = Field(None, alias="Grimorie")
 
 
-class RegisterBaseRequest(BaseRequest):
+class RegisterBaseRequestSchema(BaseRequestSchema):
     name: str = Field(..., alias="name", min_length=1, max_length=20, description="User name")
     last_name: str = Field(
         ..., alias="last_name", min_length=1, max_length=20, description="User last name"
@@ -28,7 +28,7 @@ class RegisterBaseRequest(BaseRequest):
     magic_skill: MagicSkillEnum = Field(..., alias="magic_skill")
 
 
-class RegisterRequest(RegisterBaseRequest):
+class RegisterRequestSchema(RegisterBaseRequestSchema):
     id: str = Field(
         default_factory=lambda: str(uuid.uuid4()), alias="id", description="Unique identifier"
     )
@@ -37,27 +37,27 @@ class RegisterRequest(RegisterBaseRequest):
     )
 
 
-class DeleteParamsRegisterRequest(BaseRequest):
+class DeleteParamsRegisterRequestSchema(BaseRequestSchema):
     """
-    DeleteParamsRegisterRequest holds record_id to delete request
+    DeleteParamsRegisterRequestSchema holds record_id to delete request
     Attributes:
         record_id: Request id.
     """
     record_id: str = Field(..., alias="record_id")
 
 
-class UpdateParamsRegisterRequest(BaseRequest):
+class UpdateParamsRegisterRequestSchema(BaseRequestSchema):
     """
-    UpdateParamsRegisterRequest holds record_id
+    UpdateParamsRegisterRequestSchema holds record_id
     Attributes:
         record_id: Request id.
     """
     record_id: str = Field(..., alias="record_id")
 
 
-class UpdateRegisterRequest(RegisterBaseRequest):
+class UpdateRegisterRequestSchema(RegisterBaseRequestSchema):
     """
-    UpdateRegisterRequest holds information to update a request 
+    UpdateRegisterRequestSchema holds information to update a request 
     Attributes:
         name: Wizard name.
         last_name: Wizard last name.
@@ -67,9 +67,9 @@ class UpdateRegisterRequest(RegisterBaseRequest):
     pass
 
 
-class UpdateParamsRegisterByRequest(BaseRequest):
+class UpdateParamsRegisterByRequestSchema(BaseRequestSchema):
     """
-    UpdateParamsRegisterByRequest holds information to update status of request 
+    UpdateParamsRegisterByRequestSchema holds information to update status of request 
     Attributes:
         record_id: Request id.
         status: Request status could be approved, rejected or in_process.

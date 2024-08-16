@@ -4,9 +4,16 @@ from fastapi import APIRouter, Depends
 
 from starlette import status
 
-from app.api.v1.assignments.schemas.response import WizardAssignmentsViewModel
+from app.api.v1.assignments.schemas.response import WizardAssignmentsSchema
+from app.core.containers import Container
+
+from app.core.contracts.use_cases.wizard_assignments_interface import WizardAssignmentsUseCaseInterface
 from app.core.schemas.exception import NotFoundException,UnprocessableEntity,InternalServerErrorException
 from app.use_cases.wizard_assignments import WizardAssignmentsUseCase
+
+
+
+
 
 assignments_router = APIRouter(
     responses={
@@ -17,11 +24,12 @@ assignments_router = APIRouter(
     },
 )
 
-
 @assignments_router.get(
-    "", response_model=List[WizardAssignmentsViewModel], status_code=status.HTTP_200_OK
+    "", response_model=List[WizardAssignmentsSchema], status_code=status.HTTP_200_OK
 )
-async def assignments(use_case: WizardAssignmentsUseCase = Depends()):
+async def assignments(
+  use_case: WizardAssignmentsUseCase = Depends()
+)-> List[WizardAssignmentsSchema]:
     """
     Retrieve all wizard assignments.
 
@@ -31,7 +39,7 @@ async def assignments(use_case: WizardAssignmentsUseCase = Depends()):
     - use_case: WizardRequestsUseCase (Dependency Injection)
 
     Returns:
-    - response: WizardRequestsViewModel
+    - response: WizardRequestsSchema
     """
-    response: List[WizardAssignmentsViewModel] = await use_case.retrieve()
+    response: List[WizardAssignmentsSchema] = await use_case.retrieve()
     return response

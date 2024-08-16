@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
-from app.models.base import MagicSkillEnum
+from app.models.core import MagicSkillEnum
 from app.models.request import WizardRequestStatus
 
 
@@ -28,9 +28,9 @@ class WizardRequestsRecord(BaseModel):
     )
 
 
-class WizardRequestsViewModel(BaseModel):
+class WizardRequestsSchema(BaseModel):
     """
-    WizardRequestsViewModel holds information about request 
+    WizardRequestsSchema holds information about request 
     of a GET request to /v1/requests
 
     Attributes:

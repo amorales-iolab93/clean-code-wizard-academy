@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import Field
 
-from app.models.base import AcademyRecord, MagicSkillEnum
+from app.models.core import AcademyRecord, MagicSkillEnum
 from app.models.request import WizardGrimorieTypes, WizardRequestStatus
 
 

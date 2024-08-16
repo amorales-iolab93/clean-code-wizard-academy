@@ -9,7 +9,7 @@ class ENVIRONMENT_NAME(str, Enum):
     DEV = "DEV"
     
 class Settings(BaseSettings):
-    ENVIRONMENT_NAME: str = os.environ["ENVIRONMENT_NAME"]
+    ENVIRONMENT_NAME: str = os.getenv("ENVIRONMENT_NAME", "LOCAL")
     PROJECT_NAME: str = "Boilerplate"
     PROJECT_TITLE: str = "Wizard Academy"
     PROJECT_DESCRIPTION: str = "Magic academy system by Jonathan M. Sanchez amorales_lab93@outlook.com"
