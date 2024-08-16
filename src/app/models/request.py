@@ -4,7 +4,7 @@ from typing import Any, Optional
 
 from pydantic import Field, root_validator
 
-from app.models.base import AcademyRecord, MagicSkillEnum
+from app.models.core import AcademyRecord, MagicSkillEnum
 
 
 class WizardRequestStatus(str, Enum):

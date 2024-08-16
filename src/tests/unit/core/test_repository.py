@@ -1,7 +1,7 @@
 import pytest
 from app.core.repository.dynamodb.repository import DynamoDbRepositoryAsync
-from app.models.base import AcademyRecordIndex
-from app.models.view.view_wizard_request import ViewWizardRequest
+from app.models.core import AcademyRecordIndex
+from app.models.views.view_wizard_request import ViewWizardRequest
 
 from tests import mocks
 from unittest.mock import AsyncMock, patch, MagicMock
@@ -130,7 +130,7 @@ async def test_dynamo_repo_remove(mock_session):
         session=mock_session
     )
     mock_table.delete_item.return_value = {"ResponseMetadata": {"HTTPStatusCode": 200}}
-    result = await repository.remove(partition_value, sort_value)
+    result = await repository.remove_by(partition_value, sort_value)
 
     # Assert 
     mock_table.delete_item.assert_called_once_with(

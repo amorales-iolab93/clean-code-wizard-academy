@@ -1,17 +1,17 @@
 from typing import Tuple
 
 from app.api.v1.requests.schemas.request import (
-    RegisterRequest,
-    UpdateParamsRegisterByRequest,
-    UpdateParamsRegisterRequest,
-    UpdateRegisterRequest,
+    RegisterRequestSchema,
+    UpdateParamsRegisterByRequestSchema,
+    UpdateParamsRegisterRequestSchema,
+    UpdateRegisterRequestSchema,
 )
 from app.models import request
 
 
 class EntityMapper:
     @staticmethod
-    def mapper_register_to_view_model(payload: RegisterRequest) -> request.WizardRequestEntity:
+    def mapper_register_to_view_model(payload: RegisterRequestSchema) -> request.WizardRequestEntity:
         result = request.WizardRequestEntity(
             **{
                 "AcademyId": f"kingdom#clover_kingdom",
@@ -27,8 +27,8 @@ class EntityMapper:
         return result
 
     def mapper_update_to_view_model(
-        params: UpdateParamsRegisterRequest,
-        payload: UpdateRegisterRequest,
+        params: UpdateParamsRegisterRequestSchema,
+        payload: UpdateRegisterRequestSchema,
         entity: request.WizardRequestEntity,
     ) -> request.WizardRequestEntity:
         result = request.WizardRequestEntity(
@@ -48,7 +48,7 @@ class EntityMapper:
         return result
 
     def mapper_update_by_to_view_model(
-        params: UpdateParamsRegisterByRequest, entity: request.WizardRequestEntity
+        params: UpdateParamsRegisterByRequestSchema, entity: request.WizardRequestEntity
     ) -> request.WizardRequestEntity:
         result = request.WizardRequestEntity(
             **{
