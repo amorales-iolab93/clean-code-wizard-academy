@@ -1,32 +1,36 @@
 from typing import List
 
-from app.api.v1.assignments.schemas.response import WizardAssignmentsViewModel
-from app.api.v1.requests.schemas.response import WizardRequestsViewModel
-from app.core.config.config import get_settings
+from fastapi import Depends
+
+from app.api.v1.assignments.schemas.response import WizardAssignmentsSchema
+from app.api.v1.requests.schemas.response import WizardRequestsSchema
+from app.core.containers import Container
+from app.core.contracts.services.report_service_interface import ReportServiceInterface
+
 from app.core.repository.dynamodb.base import FilterCommand
 from app.core.repository.dynamodb.repository import DynamoDbRepositoryAsync
-from app.models.base import AcademyRecordIndex
-from app.models.view import view_wizard_request
+
+from app.models.views import view_wizard_request
 from app.services.mappers.view_model_mapper import ViewModelMapper
 
+from dependency_injector.wiring import inject, Provide
 
-class ReportService:
-    def __init__(self):
-        db_repository = DynamoDbRepositoryAsync[view_wizard_request.ViewWizardRequest].build(
-            item_class=view_wizard_request.ViewWizardRequest,
-            table_name=get_settings().PROJECT_TABLE,
-            partition_key=AcademyRecordIndex.PK,
-            sort_key=AcademyRecordIndex.SK,
-            url_localhost=get_settings().USE_LOCAL_DB,
-        )
+class ReportService(ReportServiceInterface):
+    @inject
+    def __init__(
+            self, 
+            db_repository:DynamoDbRepositoryAsync[view_wizard_request.ViewWizardRequest]=
+            Depends(Provide[Container.report_repository])
+            
+        ):
         self._db_repository = db_repository
 
-    async def retrieve_assignments(self, disabled=False) -> List[WizardAssignmentsViewModel]:
+    async def retrieve_assignments(self, disabled=False) -> List[WizardAssignmentsSchema]:
         retrieve_assignments = await self._retrieve_list(disabled)
         assignments_view_model = ViewModelMapper.mapper_to_view_assignments(retrieve_assignments)
         return assignments_view_model
 
-    async def retrieve_requests(self, disabled=False) -> WizardRequestsViewModel:
+    async def retrieve_requests(self, disabled=False) -> WizardRequestsSchema:
         retrieve_requests = await self._retrieve_list(disabled)
         request_view_model = ViewModelMapper.mapper_to_view_requests(retrieve_requests)
         return request_view_model

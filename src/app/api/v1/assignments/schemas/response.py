@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
-from app.models.base import MagicSkillEnum
+from app.models.core import MagicSkillEnum
 from app.models.request import WizardGrimorieTypes, WizardRequestStatus
 
 
@@ -30,9 +30,9 @@ class WizardAssignmentsRecord(BaseModel):
 
 
 
-class WizardAssignmentsViewModel(BaseModel):
+class WizardAssignmentsSchema(BaseModel):
     """
-    WizardAssignmentsViewModel holds information about assignments grouped by grimorie
+    WizardAssignmentsSchema holds information about assignments grouped by grimorie
     of a GET request to /v1/assignments
 
     Attributes:

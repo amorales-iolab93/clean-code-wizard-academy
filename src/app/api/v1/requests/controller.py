@@ -3,15 +3,17 @@ from starlette import status
 from starlette.responses import Response
 
 from app.api.v1.requests.schemas.request import (
-    DeleteParamsRegisterRequest,
-    RegisterRequest,
-    UpdateParamsRegisterByRequest,
-    UpdateParamsRegisterRequest,
-    UpdateRegisterRequest,
+    DeleteParamsRegisterRequestSchema,
+    RegisterRequestSchema,
+    UpdateParamsRegisterByRequestSchema,
+    UpdateParamsRegisterRequestSchema,
+    UpdateRegisterRequestSchema,
 )
-from app.api.v1.requests.schemas.response import WizardRequestsViewModel
+from app.api.v1.requests.schemas.response import WizardRequestsSchema
+from app.core.contracts.use_cases.wizard_requests_interface import WizardRequestsUseCaseInterface
 from app.core.schemas.exception import NotFoundException,UnprocessableEntity,InternalServerErrorException
 from app.use_cases.wizard_requests import WizardRequestsUseCase
+
 
 requests_router = APIRouter(
     responses={
@@ -23,8 +25,10 @@ requests_router = APIRouter(
 )
 
 
-@requests_router.get("", response_model=WizardRequestsViewModel, status_code=status.HTTP_200_OK)
-async def requests(use_case: WizardRequestsUseCase = Depends()):
+@requests_router.get("", response_model=WizardRequestsSchema, status_code=status.HTTP_200_OK)
+async def requests(
+    use_case: WizardRequestsUseCase = Depends()
+)->WizardRequestsSchema:
     """
     Retrieve all wizard requests.
 
@@ -34,21 +38,24 @@ async def requests(use_case: WizardRequestsUseCase = Depends()):
     - use_case: WizardRequestsUseCase (Dependency Injection)
 
     Returns:
-    - response: WizardRequestsViewModel
+    - response: WizardRequestsSchema
     """
-    response: WizardRequestsViewModel = await use_case.retrieve()
+    response: WizardRequestsSchema = await use_case.retrieve()
     return response
 
 
 @requests_router.post("")
-async def register(body: RegisterRequest = Body(), use_case: WizardRequestsUseCase = Depends()):
+async def register(
+    body: RegisterRequestSchema = Body(), 
+    use_case: WizardRequestsUseCase = Depends()
+)-> None:
     """
     Register a new wizard request.
 
     This endpoint registers a new wizard request in the database.
 
     Parameters:
-    - body: RegisterRequest (Request Body)
+    - body: RegisterRequestSchema (Request Body)
     - use_case: WizardRequestsUseCase (Dependency Injection)
 
     Returns:
@@ -65,10 +72,10 @@ async def register(body: RegisterRequest = Body(), use_case: WizardRequestsUseCa
 
 @requests_router.put("/{record_id}")
 async def update_request(
-    body: UpdateRegisterRequest = Body(),
-    params: UpdateParamsRegisterRequest = Depends(),
+    body: UpdateRegisterRequestSchema = Body(),
+    params: UpdateParamsRegisterRequestSchema = Depends(),
     use_case: WizardRequestsUseCase = Depends(),
-):
+)-> None:
     """
     Update an existing wizard request.
 
@@ -76,8 +83,8 @@ async def update_request(
 
     Parameters:
     - record_id: str (Path Parameter)
-    - body: UpdateRegisterRequest (Request Body)
-    - params: UpdateParamsRegisterRequest (Dependency Injection)
+    - body: UpdateRegisterRequestSchema (Request Body)
+    - params: UpdateParamsRegisterRequestSchema (Dependency Injection)
     - use_case: WizardRequestsUseCase (Dependency Injection)
 
     Returns:
@@ -89,8 +96,9 @@ async def update_request(
 
 @requests_router.patch("/{record_id}/status/{status}")
 async def set_status(
-    params: UpdateParamsRegisterByRequest = Depends(), use_case: WizardRequestsUseCase = Depends()
-):
+    params: UpdateParamsRegisterByRequestSchema = Depends(), 
+    use_case: WizardRequestsUseCase = Depends()
+)-> None:
     """
     Update the status of a wizard request.
 
@@ -99,7 +107,7 @@ async def set_status(
     Parameters:
     - record_id: str (Path Parameter)
     - status: str (Path Parameter)
-    - params: UpdateParamsRegisterByRequest (Dependency Injection)
+    - params: UpdateParamsRegisterByRequestSchema (Dependency Injection)
     - use_case: WizardRequestsUseCase (Dependency Injection)
 
     Returns:
@@ -111,8 +119,9 @@ async def set_status(
 
 @requests_router.delete("/{record_id}")
 async def remove(
-    params: DeleteParamsRegisterRequest = Depends(), use_case: WizardRequestsUseCase = Depends()
-):
+    params: DeleteParamsRegisterRequestSchema = Depends(), 
+    use_case: WizardRequestsUseCase = Depends()
+)-> None:
     """
     Delete a wizard request.
 
@@ -120,7 +129,7 @@ async def remove(
 
     Parameters:
     - record_id: str (Path Parameter)
-    - params: DeleteParamsRegisterRequest (Dependency Injection)
+    - params: DeleteParamsRegisterRequestSchema (Dependency Injection)
     - use_case: WizardRequestsUseCase (Dependency Injection)
 
     Returns:
